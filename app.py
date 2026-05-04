@@ -20,10 +20,11 @@ basedir = os.path.abspath(os.path.dirname(__file__))
 load_dotenv()
 
 API_KEY = os.getenv("OMDB_API_KEY")
+SECRET_KEY = os.getenv("OMDB_SECRET_KEY")
 
 # Database configuration (SQLite)
 app.config['SQLALCHEMY_DATABASE_URI'] = f"sqlite:///{os.path.join(basedir, 'instance/movies.db')}"
-app.config['SECRET_KEY'] = 'super-secret-key'
+app.config['SECRET_KEY'] = SECRET_KEY
 
 # Initialize database
 db.init_app(app)
@@ -41,9 +42,8 @@ def api_search_movie(title, year):
     Fetch movie data from OMDb API.
     Returns JSON data or None if something fails.
     """
-    print(API_KEY)
     url = "http://www.omdbapi.com/"
-    print("API_KEY:", API_KEY)
+
     params = {
         "apikey": API_KEY,
         "t": title
