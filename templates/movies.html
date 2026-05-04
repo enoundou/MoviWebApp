@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+    <a href="/" class="back-link">← Back to Users</a>
+
+    <h1>Movies for {{ user.name }}</h1>
+
+    <div class="movie-grid">
+        {% for movie in movies %}
+            <div class="movie-card">
+                <img src="{{ movie.poster_url }}" alt="{{ movie.title }}" class="poster">
+
+                <form method="post" action="{{ url_for('update_movie',  user_id= movie.user_id, movie_id= movie.id) }}">
+                    <input type="text" name="title" value="{{ movie.title }}" class="movie-title-input">
+                    <button class="update-btn" type="submit">Update</button>
+                </form>
+
+                <p><strong>Year:</strong> {{ movie.year }}</p>
+                <p><strong>Director:</strong> {{ movie.director }}</p>
+
+                <form method="post" action="{{ url_for('delete_movie',  user_id= movie.user_id, movie_id= movie.id) }}"
+                      onsubmit="return confirm('Delete this movie?');">
+                    <button class="delete-btn" type="submit">Delete</button>
+                </form>
+            </div>
+        {% endfor %}
+    </div>
+
+    <section class="add-movie-box">
+        <h2>Add New Movie</h2>
+
+        <form method="post" action="{{ url_for('add_movie',  user_id= user.id) }}" class="add-form-movie">
+            <div class="inputs">
+                <input type="text" name="title" placeholder="Movie title" required>
+                <input type="number" name="year" placeholder="Year (optional)">
+            </div>
+
+            <button type="submit" class="add-btn">Add Movie</button>
+        </form>
+    </section>
+
+
+{% endblock %}
