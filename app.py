@@ -1,4 +1,5 @@
 import json
+from dotenv import load_dotenv
 import os
 
 import requests
@@ -15,6 +16,10 @@ from models import db, Movie, User
 app = Flask(__name__)
 
 basedir = os.path.abspath(os.path.dirname(__file__))
+
+load_dotenv()
+
+API_KEY = os.getenv("OMDB_API_KEY")
 
 # Database configuration (SQLite)
 app.config['SQLALCHEMY_DATABASE_URI'] = f"sqlite:///{os.path.join(basedir, 'instance/movies.db')}"
@@ -36,9 +41,11 @@ def api_search_movie(title, year):
     Fetch movie data from OMDb API.
     Returns JSON data or None if something fails.
     """
-    url = "http://www.omdbapi.com/?i=tt3896198&apikey=137c4ce9"
-
+    print(API_KEY)
+    url = "http://www.omdbapi.com/"
+    print("API_KEY:", API_KEY)
     params = {
+        "apikey": API_KEY,
         "t": title
     }
 
@@ -46,7 +53,7 @@ def api_search_movie(title, year):
         params["y"] = year
 
     try:
-        response = requests.get(url, params=params)
+        response = requests.get(url, params=params, timeout=5)
         response.raise_for_status()
 
         data = response.json()
